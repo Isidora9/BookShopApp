@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,6 @@ namespace BookShop.Domain.Entities
         public ICollection<OrderItem>? OrderItems { get; set; }
         public decimal TotalPrice { get; set; }
         public bool Status { get; set; }
-        public ApplicationUser User { get; set; }
+        public IdentityUser User { get; set; }
     }
 }
