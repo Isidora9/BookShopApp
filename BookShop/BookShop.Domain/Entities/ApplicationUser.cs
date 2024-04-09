@@ -10,23 +10,6 @@ namespace BookShop.Domain.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        //[Required]
-        //public string Id { get; set; }
-        //public string Email { get; set; }
-        //public string Password { get; set; }
-        //public string UserName { get; set; }
-        //[Required]
-        //public bool EmailConfirmed { get; set; }
-        //[Required]
-        //public bool PhoneNumberConfirmed { get; set; }
-        //[Required]
-        //public bool TwoFactorEnabled { get; set; }
-        //[Required]
-        //public bool LockoutEnabled { get; set; }
-        //[Required]
-        //public int AccessFailedCount { get; set; }
-        //[Required]
-        //public string Discriminator { get; set; }
-
+        public string CustomTag { get; set; }
     }
 }

@@ -10,14 +10,13 @@
     <div class="row">
 @foreach (var item in Model)
 {
-    <div class="card" style="width: 18rem;">
+    <div class="card mb-5" style="width: 18rem;">
         <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/de/Dune-Frank_Herbert_%281965%29_First_edition.jpg/220px-Dune-Frank_Herbert_%281965%29_First_edition.jpg" class="card-img-top" alt="img">
         <div class="card-body">
             <h5 class="card-title">@item.Title</h5>
             <p class="card-text">@item.Description</p>
-
-            @* <a href="#" class="btn btn-primary">Add to cart</a> *@
-
+            <p class="card-text">@Html.DisplayFor(model => item.Price)</p>
+            <p class="card-text">Available: @Html.DisplayFor(model => item.AvailableBookNum)</p>
             <form asp-controller="Cart" asp-action="AddToCart" method="post">
                 <input type="hidden" name="bookId" value="@item.BookId" />
                 <label for="quantity">Quantity:</label>

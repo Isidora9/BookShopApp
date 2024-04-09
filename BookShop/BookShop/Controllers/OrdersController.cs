@@ -7,23 +7,39 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookShop.Data;
 using BookShop.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookShop.Controllers
 {
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Orders.Include(o => o.User);
-            return View(await applicationDbContext.ToListAsync());
+            var orders = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(o => o.Book)
+                .ToListAsync();
+
+            foreach (var order in orders)
+            {
+                order.TotalPrice = order.CalculateTotalPrice();
+            }
+
+            return View(orders);
+
+            //var applicationDbContext = _context.Orders;
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Orders/Details/5
@@ -35,7 +51,6 @@ namespace BookShop.Controllers
             }
 
             var order = await _context.Orders
-                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
             {
@@ -48,7 +63,7 @@ namespace BookShop.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
 
@@ -57,15 +72,27 @@ namespace BookShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,UserId,OrderDate,TotalPrice,Status")] Order order)
+        [Authorize]
+        public async Task<IActionResult> Create([Bind("OrderId,OrderDate,TotalPrice,Status")] Order order)
         {
-            //var userTry = _context.Users.FindAsync(order.UserId);
-            if (ModelState.IsValid)
+            var user = await _userManager.GetUserAsync(this.User);
+            order.UserId = user.Id;
+
+            ModelState.ClearValidationState("UserId");
+            
+            if (TryValidateModel(order, "UserId"))
             {
                 _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(order);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", order.UserId);
             return View(order);
         }
@@ -92,7 +119,7 @@ namespace BookShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,UserId,OrderDate,TotalPrice,Status")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderId,OrderDate,TotalPrice,Status")] Order order)
         {
             if (id != order.OrderId)
             {
@@ -132,7 +159,6 @@ namespace BookShop.Controllers
             }
 
             var order = await _context.Orders
-                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
             {
