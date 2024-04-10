@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace BookShop.Controllers
 {
@@ -46,7 +47,8 @@ namespace BookShop.Controllers
                 _context.Orders.Add(activeOrder);
                 await _context.SaveChangesAsync();
             }
-
+            int cartItemCount = 0;
+            ViewBag.CartItemCount = cartItemCount;
             return View(activeOrder);
         }
 
@@ -100,10 +102,67 @@ namespace BookShop.Controllers
             else
             {
                 TempData["ErrorMessage"] = $"There are only {book.AvailableBookNum} books available.";
-                //ModelState.AddModelError("quantity", $"There are only {book.AvailableBookNum} books available.");
-                //return RedirectToAction("Index");
+                return RedirectToAction("Index", "Shop", new { id = bookId });
             }
+
             return RedirectToAction("Index", "Cart");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int orderItemId)
+        {
+            var orderItem = await _context.OrderItems.FindAsync(orderItemId);
+            if (orderItem == null)
+            {
+                return NotFound();
+            }
+            await _context.Entry(orderItem).Reference(o => o.Book).LoadAsync();
+            var book = orderItem.Book;
+            book.AvailableBookNum += orderItem.Quantity;
+            _context.OrderItems.Remove(orderItem);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateQuantity(int itemId, int quantity)
+        {
+            var orderItem = await _context.OrderItems.FindAsync(itemId);
+            if (orderItem == null)
+            {
+                return NotFound();
+            }
+            var oldQuantity = orderItem.Quantity;
+            orderItem.Quantity = quantity;
+            await _context.Entry(orderItem).Reference(o => o.Book).LoadAsync();
+            var book = orderItem.Book;
+            var quantityDifference = quantity - oldQuantity;
+            if (book.AvailableBookNum - quantityDifference >= 0)
+            {
+                //book.AvailableBookNum -= quantity;
+                if (quantityDifference > 0)
+                {
+                    book.AvailableBookNum -= quantityDifference;
+                }
+                else
+                {
+                    book.AvailableBookNum -= quantityDifference;
+                }
+                await _context.SaveChangesAsync();
+                return Ok("Quantity updated successfully.");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"There are only {book.AvailableBookNum} books available.";
+                return RedirectToAction("Index", "Cart");
+            }
+        }
+
+        public IActionResult CartItemCount() 
+        {
+            
+            return View();
         }
 
         public IActionResult OrderSuccess() 

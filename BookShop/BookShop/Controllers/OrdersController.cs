@@ -35,7 +35,7 @@ namespace BookShop.Controllers
             {
                 order.TotalPrice = order.CalculateTotalPrice();
             }
-
+            await _context.SaveChangesAsync();
             return View(orders);
 
             //var applicationDbContext = _context.Orders;

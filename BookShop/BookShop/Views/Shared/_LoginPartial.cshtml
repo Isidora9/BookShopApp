@@ -3,9 +3,21 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+    @* <li class="nav-item">
+        <a href="/Cart/Index" class="position-relative text-dark text-decoration-none">
+            <i class="fas fa-shopping-cart fa-lg"></i>
+            @if (Model.OrderItems.Count > 0)
+            {
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    @Model.OrderItems.Count
+                </span>
+            }
+        </a>
+    </li> *@
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>
