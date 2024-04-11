@@ -1,4 +1,7 @@
+using BookShop.Data;
+using BookShop.Domain.Entities;
 using BookShop.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

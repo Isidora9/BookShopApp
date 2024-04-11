@@ -1,5 +1,9 @@
 ﻿@model BookShop.Domain.Entities.Order
 
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
 <h4>Shopping Cart</h4>
 <hr></hr>
 
@@ -12,6 +16,7 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th></th>
                 <th>Title</th>
                 <th>Price</th>
                 <th>Quantity</th>
@@ -23,6 +28,9 @@ else
             @foreach (var item in Model.OrderItems)
             {
                 <tr>
+                    <td>
+                        <img src="@item.Book.ImgUrl" height="100px"></img>
+                    </td>
                     <td>@item.Book.Title</td>
                     <td>@Html.DisplayFor(model => item.Book.Price)</td>
                     <td>
@@ -56,6 +64,7 @@ else
         <tfoot>
         <td class="no-bottom"></td>
         <td class="no-bottom"></td>
+        <td class="no-bottom"></td>
         <td class="no-bottom">Total price:</td>
         <td class="no-bottom">
                 @Html.DisplayFor(model => model.TotalPrice)
@@ -64,7 +73,7 @@ else
     </table>
 }
 <div>
-    <a asp-controller="Shop" class="btn btn-success" asp-action="Index">Back to Shop</a>
+    <a href="@Url.Action("Index", "Shop", new { data = ViewBag.CartItemCount })" class="btn btn-success">Back to Shop</a>
 </div>
 
 @* <a asp-action="OrderSuccess" class="btn btn-success @if (Model.OrderItems.Count == 0) {

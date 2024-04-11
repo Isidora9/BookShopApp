@@ -12,9 +12,12 @@ namespace BookShop.Domain.Entities
         public int BookId { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
+        public string Genre { get; set; }
+        public string ImgUrl { get; set; }
         public string Description { get; set; }
         [DisplayFormat(DataFormatString = "${0:N2}")]
         public decimal Price { get; set; }
         public int AvailableBookNum { get; set; }
+
     }
 }

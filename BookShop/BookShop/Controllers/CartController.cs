@@ -23,6 +23,7 @@ namespace BookShop.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            int cartItemCount = 0;
             var user = await _userManager.GetUserAsync(this.User);
 
             var activeOrder = _context.Orders
@@ -47,7 +48,10 @@ namespace BookShop.Controllers
                 _context.Orders.Add(activeOrder);
                 await _context.SaveChangesAsync();
             }
-            int cartItemCount = 0;
+            foreach (var item in activeOrder.OrderItems)
+            {
+                cartItemCount += item.Quantity;
+            }
             ViewBag.CartItemCount = cartItemCount;
             return View(activeOrder);
         }
@@ -150,7 +154,8 @@ namespace BookShop.Controllers
                     book.AvailableBookNum -= quantityDifference;
                 }
                 await _context.SaveChangesAsync();
-                return Ok("Quantity updated successfully.");
+                //return Ok("Quantity updated successfully.");
+                return RedirectToAction("Index", "Cart");
             }
             else
             {

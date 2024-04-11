@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookShop.Data;
 using BookShop.Domain.Entities;
+using NuGet.Protocol.Core.Types;
 
 namespace BookShop.Controllers
 {
@@ -20,9 +21,39 @@ namespace BookShop.Controllers
         }
 
         // GET: Shop
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string genre, string author, string data)
         {
-            return View(await _context.Books.ToListAsync());
+            ViewBag.NumOfAddedBooks = data;
+            //int numberOfAddedBooks = 0;
+            ViewBag.SelectedGenre = genre;
+            IEnumerable<Book> books;
+
+            if (!string.IsNullOrEmpty(genre))
+            {
+                if (!string.IsNullOrEmpty(author))
+                {
+                    books = _context.Books.Where(b => b.Genre == genre).Where(b => b.Author.Contains(author)).ToList();
+                }
+                else
+                {
+                    books = _context.Books.Where(b => b.Genre == genre);
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(author))
+                {
+                    books = _context.Books.Where(b => b.Author.Contains(author)).ToList();
+                }
+                else
+                {
+                    // If no genre is selected, get all books
+                    books = _context.Books.ToList();
+                }
+            }
+
+            return View(books);
+            //return View(await _context.Books.ToListAsync());
         }
 
         // GET: Shop/Details/5
@@ -148,6 +179,29 @@ namespace BookShop.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        //public IActionResult FilterByGenre(string genre)
+        //{
+        //    List<Book> filteredBooks = _context.Books.Where(b => b.Genre == genre).ToList();
+        //    return View(filteredBooks);
+        //}
+
+        //private List<Book> FindBooksByGenre(string genre)
+        //{
+        //    List<Book> filteredBooks = _context.Books.Where(b => b.Genre == genre).ToList();
+        //    return filteredBooks;
+        //}
+
+        //private List<Book> FindBooksByAuthor(List<Book> books, string author)
+        //{
+        //    List<Book> filteredBooks = books.Where(b => b.Author == author).ToList();
+        //    return filteredBooks;
+        //}
+
+        //private int CalculateNumberOfAddedBooks() 
+        //{
+
+        //}
 
         private bool BookExists(int id)
         {

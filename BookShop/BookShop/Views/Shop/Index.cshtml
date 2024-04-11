@@ -1,21 +1,84 @@
 ﻿@model IEnumerable<BookShop.Domain.Entities.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Shop";
 }
 
+<style>
+    .container3 {
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+    }
+
+    .container3 img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+</style>
+
 <h1>Shop</h1>
+<a href="/Cart/Index" class="position-relative text-dark text-decoration-none">
+    <i class="fas fa-shopping-cart fa-lg"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        @ViewBag.NumOfAddedBooks
+        </span>
+</a>
+
+<div>
+    <div class="dropdown">
+        @* <button type="button" class="btn btn-secondary me-4 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            @if (string.IsNullOrEmpty(ViewBag.SelectedGenre))
+            {
+                <text>Choose genre</text>
+            }
+            else
+            {
+                <text>@ViewBag.SelectedGenre</text>
+            }
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "" })">All</a></li>
+            <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Fantasy" })">Fantasy</a></li>
+            <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Children's literature" })">Children's literature</a></li>
+        </ul> *@
+        <form class="d-flex justify-content-end" asp-action="Index" asp-controller="Shop" method="get">
+            <button type="button" class="btn btn-secondary me-4 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                @if (string.IsNullOrEmpty(ViewBag.SelectedGenre))
+                {
+                    <text>Choose genre</text>
+                }
+                else
+                {
+                    <text>@ViewBag.SelectedGenre</text>
+                }
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "" })">All</a></li>
+                <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Fantasy" })">Fantasy</a></li>
+                <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Children's literature" })">Children's literature</a></li>
+            </ul>
+            <input style="width:200px;" class="form-control me-2" type="search" placeholder="Search by author" aria-label="Search" name="author"/>
+            <button class="btn btn-secondary" type="submit">Search</button>
+        </form>
+    </div>
+</div>
 
 <div class="container">
     <div class="row">
 @foreach (var item in Model)
 {
-    <div class="card mb-5" style="width: 18rem;">
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/de/Dune-Frank_Herbert_%281965%29_First_edition.jpg/220px-Dune-Frank_Herbert_%281965%29_First_edition.jpg" class="card-img-top" alt="img">
-        <div class="card-body">
+    <div class="card m-2" style="width: 15rem;">
+        <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+            <div class="container3">
+                <img src="@item.ImgUrl" class="card-img-top" alt="@item.Title" height="300px" />
+            </div>
+        </a>
+            <div class="card-body">
             <h5 class="card-title">@item.Title</h5>
-            <p class="card-text">@item.Description</p>
             <p class="card-text">@Html.DisplayFor(model => item.Price)</p>
+            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">See details</a>
             <p class="card-text">Available: @Html.DisplayFor(model => item.AvailableBookNum)</p>
             <form asp-controller="Cart" asp-action="AddToCart" method="post">
                 <input type="hidden" name="bookId" value="@item.BookId" />
@@ -35,3 +98,10 @@
         alert("@TempData["ErrorMessage"]");
     </script>
 }
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+@* <script>
+    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+        return new bootstrap.Dropdown(dropdownToggleEl)
+    })
+</script> *@
