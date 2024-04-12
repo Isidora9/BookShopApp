@@ -11,11 +11,11 @@
         overflow: hidden;
     }
 
-    .container3 img {
+    /* .container3 img {
         width: 100%;
         height: 100%;
         object-fit: contain;
-    }
+    } */
 </style>
 
 <h1>Shop</h1>
@@ -77,15 +77,17 @@
         </a>
             <div class="card-body">
             <h5 class="card-title">@item.Title</h5>
-            <p class="card-text">@Html.DisplayFor(model => item.Price)</p>
-            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">See details</a>
-            <p class="card-text">Available: @Html.DisplayFor(model => item.AvailableBookNum)</p>
-            <form asp-controller="Cart" asp-action="AddToCart" method="post">
-                <input type="hidden" name="bookId" value="@item.BookId" />
-                <label for="quantity">Quantity:</label>
-                <input type="number" name="quantity" value="1" min="1" max="10" />
-                <button type="submit" class="btn btn-primary">Add to cart</button>
-            </form>
+            <div mb-0>
+                <p class="card-text">@Html.DisplayFor(model => item.Price)</p>
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">See details</a>
+                <p class="card-text">Available: @Html.DisplayFor(model => item.AvailableBookNum)</p>
+                <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                    <input type="hidden" name="bookId" value="@item.BookId" />
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" value="1" min="1" max="10" />
+                    <button type="submit" class="btn btn-primary">Add to cart</button>
+                </form>
+            </div>
 
         </div>
     </div>

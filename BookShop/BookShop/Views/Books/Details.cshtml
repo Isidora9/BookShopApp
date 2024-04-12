@@ -53,3 +53,45 @@ img{
     <a asp-action="Edit" asp-route-id="@Model?.BookId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+<h4 class="mt-5 mb-3">Comments</h4>
+@if (Model.Comments != null)
+{
+    @foreach (var item in Model.Comments)
+    {
+        <figure class="py-2">
+            <blockquote>
+                <p>@item.Content</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                @item.User.UserName, <cite title="Source Title">@item.CreatedAt</cite>
+            </figcaption>
+        </figure>
+        <hr></hr>
+    }
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    @* <form class="my-5" asp-action="AddComment" method="post">
+        <input type="hidden" name="bookId" value="@Model.BookId" />
+        <textarea name="content" rows="4" cols="50"></textarea>
+        <button type="submit">Add Comment</button>
+    </form> *@
+    <form class="my-5" asp-action="AddComment" method="post">
+        <input type="hidden" name="bookId" value="@Model.BookId" />
+        <div class="mb-3 col-sm-6">
+            <textarea class="form-control" style="border-color: #808080;" id="comment" name="content" rows="4" placeholder="Enter your comment here..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Comment</button>
+    </form>
+}
+
+@section scripts {
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            alert("@TempData["ErrorMessage"]");
+        </script>
+    }
+}
+

@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookShop.Data;
 using BookShop.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookShop.Controllers
 {
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BooksController(ApplicationDbContext context)
+
+        public BooksController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Books
@@ -34,6 +39,8 @@ namespace BookShop.Controllers
             }
 
             var book = await _context.Books
+                .Include(b => b.Comments)
+                .ThenInclude(o => o.User)
                 .FirstOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
@@ -149,9 +156,37 @@ namespace BookShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> AddComment(int bookId, string content) 
+        {
+            var user = await _userManager.GetUserAsync(this.User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var commentList = _context.Comments.Where(o => o.BookId == bookId && o.UserId == user.Id);
+            if (!commentList.Any())
+            {
+                var comment = new Comment
+                {
+                    UserId = user.Id,
+                    BookId = bookId,
+                    Content = content,
+                    CreatedAt = DateTime.Now
+                };
+                _context.Comments.Add(comment);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "You have already left a comment for this book.";
+            }
+            return RedirectToAction("Details", "Books", new { id = bookId });
+        }
+
         private bool BookExists(int id)
         {
             return _context.Books.Any(e => e.BookId == id);
         }
+
     }
 }

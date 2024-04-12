@@ -18,6 +18,6 @@ namespace BookShop.Domain.Entities
         [DisplayFormat(DataFormatString = "${0:N2}")]
         public decimal Price { get; set; }
         public int AvailableBookNum { get; set; }
-
+        public ICollection<Comment> Comments { get; set; }
     }
 }

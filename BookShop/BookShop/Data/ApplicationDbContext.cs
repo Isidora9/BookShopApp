@@ -15,5 +15,6 @@ namespace BookShop.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }
