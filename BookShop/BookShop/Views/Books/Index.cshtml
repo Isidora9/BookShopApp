@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.ImgUrl)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
@@ -20,9 +23,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImgUrl)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
@@ -40,6 +40,9 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                <img src="@item.ImgUrl" height="100px"></img>
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
@@ -47,9 +50,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImgUrl)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)

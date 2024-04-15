@@ -19,30 +19,9 @@
 </style>
 
 <h1>Shop</h1>
-<a href="/Cart/Index" class="position-relative text-dark text-decoration-none">
-    <i class="fas fa-shopping-cart fa-lg"></i>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-        @ViewBag.NumOfAddedBooks
-        </span>
-</a>
 
 <div>
     <div class="dropdown">
-        @* <button type="button" class="btn btn-secondary me-4 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            @if (string.IsNullOrEmpty(ViewBag.SelectedGenre))
-            {
-                <text>Choose genre</text>
-            }
-            else
-            {
-                <text>@ViewBag.SelectedGenre</text>
-            }
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "" })">All</a></li>
-            <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Fantasy" })">Fantasy</a></li>
-            <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Children's literature" })">Children's literature</a></li>
-        </ul> *@
         <form class="d-flex justify-content-end" asp-action="Index" asp-controller="Shop" method="get">
             <button type="button" class="btn btn-secondary me-4 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 @if (string.IsNullOrEmpty(ViewBag.SelectedGenre))

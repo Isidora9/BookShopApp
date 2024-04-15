@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BookShop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -30,6 +31,7 @@ namespace BookShop.Controllers
             return View(await _context.Books.ToListAsync());
         }
 
+        [AllowAnonymous]
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {

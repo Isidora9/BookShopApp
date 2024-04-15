@@ -6,6 +6,14 @@
 @inject ApplicationDbContext Context
 
 
+<style>
+    .position-relative {
+        position: relative;
+        top: 8px;
+        left: -8px;
+    }
+</style>
+
 @{
     List<OrderItem> orderItems = null;
     int numberOfItems = 0;
@@ -15,52 +23,57 @@
         var order = Context.Orders
             .Where(o => o.UserId == user.Id)
             .FirstOrDefault();
-        orderItems = Context.OrderItems
-            .Where(o => o.OrderId == order.OrderId)
-            .ToList();
-        foreach (var item in orderItems)
+            if (order != null)
         {
-            numberOfItems += item.Quantity;
+            orderItems = Context.OrderItems
+    .Where(o => o.OrderId == order.OrderId)
+    .ToList();
+            foreach (var item in orderItems)
+            {
+                numberOfItems += item.Quantity;
+            }
         }
     }
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    @if (User.Identity.IsAuthenticated && orderItems != null && orderItems.Any())
+    @if (SignInManager.IsSignedIn(User))
     {
+        @if (User.Identity.IsAuthenticated && orderItems != null && orderItems.Any())
+        {
+            <li class="nav-item">
+                <a href="/Cart/Index" class="position-relative text-dark text-decoration-none">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        @numberOfItems
+                    </span>
+                </a>
+            </li>
+            @* <li class="nav-item">
+                <a href="/Cart/Index" class="position-relative text-dark text-decoration-none">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        @numberOfItems
+                    </span>
+                </a>
+            </li> *@
+        }
         <li class="nav-item">
-            <a href="/Cart/Index" class="position-relative text-dark text-decoration-none">
-                <i class="fas fa-shopping-cart fa-lg"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    @numberOfItems
-                </span>
-            </a>
+            <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+        </li>
+        <li class="nav-item">
+            <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
         </li>
     }
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <a href="/Cart/Index" class="position-relative text-dark text-decoration-none">
-        <i class="fas fa-shopping-cart fa-lg"></i>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            0
-        </span>
-    </a>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
 </ul>
