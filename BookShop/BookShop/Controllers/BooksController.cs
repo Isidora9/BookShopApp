@@ -35,6 +35,7 @@ namespace BookShop.Controllers
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            double bookRating = 0;
             if (id == null)
             {
                 return NotFound();
@@ -49,6 +50,14 @@ namespace BookShop.Controllers
                 return NotFound();
             }
 
+            foreach (var item in book.Comments)
+            {
+                bookRating += item.Rating;
+            }
+
+            bookRating /= book.Comments.Count;
+            //ViewBag.BookRating = Math.Round(bookRating, 1);
+            ViewBag.BookRating = string.Format("{0:0.0}", bookRating);
             return View(book);
         }
 
@@ -158,13 +167,21 @@ namespace BookShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> AddComment(int bookId, string content) 
+        [AllowAnonymous]
+        public async Task<IActionResult> AddComment(int bookId, string content, int rating) 
         {
             var user = await _userManager.GetUserAsync(this.User);
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+
+            if (rating == 0 || rating > 5 || rating < 1)
+            {
+                TempData["MissingRating"] = "Please select a rating before adding a comment.";
+                return RedirectToAction("Details", "Books", new { id = bookId });
+            }
+
             var commentList = _context.Comments.Where(o => o.BookId == bookId && o.UserId == user.Id);
             if (!commentList.Any())
             {
@@ -173,7 +190,8 @@ namespace BookShop.Controllers
                     UserId = user.Id,
                     BookId = bookId,
                     Content = content,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    Rating = rating
                 };
                 _context.Comments.Add(comment);
                 await _context.SaveChangesAsync();

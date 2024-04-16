@@ -23,21 +23,21 @@ namespace BookShop.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            int cartItemCount = 0;
+            int discount = 0;
             var user = await _userManager.GetUserAsync(this.User);
 
             var activeOrder = _context.Orders
             .Include(o => o.OrderItems)
             .ThenInclude(o => o.Book)
-            .FirstOrDefault(o => o.UserId == user.Id);
+            .FirstOrDefault(o => o.UserId == user.Id && o.Shipped == false);
             if (activeOrder != null)
             {
                 activeOrder.TotalPrice = activeOrder.CalculateTotalPrice();
+                await _context.SaveChangesAsync();
             }
 
             if (activeOrder == null)
             {
-                // If no active order exists, create a new one
                 activeOrder = new Order
                 {
                     UserId = user.Id,
@@ -48,11 +48,12 @@ namespace BookShop.Controllers
                 _context.Orders.Add(activeOrder);
                 await _context.SaveChangesAsync();
             }
-            foreach (var item in activeOrder.OrderItems)
-            {
-                cartItemCount += item.Quantity;
-            }
-            ViewBag.CartItemCount = cartItemCount;
+
+            discount = CalculateDiscount(user);
+            ViewBag.LoyaltyDiscount = discount;
+
+
+
             return View(activeOrder);
         }
 
@@ -61,14 +62,12 @@ namespace BookShop.Controllers
         {
             var user = await _userManager.GetUserAsync(this.User);
 
-            // Find the user's active order (if any)
             var activeOrder = _context.Orders
                 .Include(o => o.OrderItems)
-                .FirstOrDefault(o => o.UserId == user.Id && o.Status == false);
+                .FirstOrDefault(o => o.UserId == user.Id && o.Shipped == false);
 
             if (activeOrder == null)
             {
-                // If no active order exists, create a new one
                 activeOrder = new Order
                 {
                     UserId = user.Id,
@@ -89,7 +88,6 @@ namespace BookShop.Controllers
 
             if (quantity <= book.AvailableBookNum)
             {
-                // Check if the book is already in the cart
                 var existingCartItem = activeOrder.OrderItems.FirstOrDefault(item => item.BookId == bookId);
                 if (existingCartItem != null)
                 {
@@ -97,7 +95,6 @@ namespace BookShop.Controllers
                 }
                 else
                 {
-                    // If not, add it to the cart
                     activeOrder.OrderItems.Add(new OrderItem { BookId = bookId, Quantity = quantity, Book = book });
                 }
                 book.AvailableBookNum -= quantity;
@@ -170,9 +167,49 @@ namespace BookShop.Controllers
             return View();
         }
 
-        public IActionResult OrderSuccess() 
+        public async Task<IActionResult> OrderSuccess() 
         {
+            var user = await _userManager.GetUserAsync(this.User);
+
+            var activeOrder = _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(o => o.Book)
+                .FirstOrDefault(o => o.UserId == user.Id && o.Shipped == false);
+            if (activeOrder != null)
+            {
+                activeOrder.Shipped = true;
+                activeOrder.TotalPrice = activeOrder.CalculateTotalPrice();
+                await _context.SaveChangesAsync();
+            }
             return View();
         }
+
+        private int CalculateDiscount(ApplicationUser user)
+        {
+            int disount = 0;
+            var shippedOrders = _context.Orders
+                //.Include(o => o.OrderItems)
+                //.ThenInclude(o => o.Book)
+                .Where(o => o.UserId == user.Id && o.Shipped == true);
+
+            if (shippedOrders != null)
+            {
+                if (shippedOrders.Count() == 1)
+                {
+                    disount = 10;
+                }
+                else if (shippedOrders.Count() == 2)
+                {
+                    disount = 15;
+                }
+                else if (shippedOrders.Count() >= 3)
+                {
+                    disount = 20;
+                }
+            }
+
+            return disount;
+        }
+
     }
 }

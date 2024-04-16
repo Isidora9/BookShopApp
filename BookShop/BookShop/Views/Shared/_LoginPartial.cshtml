@@ -21,7 +21,7 @@
     {
         var user = await UserManager.GetUserAsync(User);
         var order = Context.Orders
-            .Where(o => o.UserId == user.Id)
+            .Where(o => o.UserId == user.Id && o.Shipped == false)
             .FirstOrDefault();
             if (order != null)
         {

@@ -21,9 +21,9 @@ namespace BookShop.Controllers
         }
 
         // GET: Shop
-        public async Task<IActionResult> Index(string genre, string author, string data)
+        public async Task<IActionResult> Index(string genre, string author)
         {
-            ViewBag.NumOfAddedBooks = data;
+            //ViewBag.NumOfAddedBooks = data;
             //int numberOfAddedBooks = 0;
             ViewBag.SelectedGenre = genre;
             IEnumerable<Book> books;
@@ -47,13 +47,11 @@ namespace BookShop.Controllers
                 }
                 else
                 {
-                    // If no genre is selected, get all books
                     books = _context.Books.ToList();
                 }
             }
 
             return View(books);
-            //return View(await _context.Books.ToListAsync());
         }
 
         // GET: Shop/Details/5
@@ -198,10 +196,6 @@ namespace BookShop.Controllers
         //    return filteredBooks;
         //}
 
-        //private int CalculateNumberOfAddedBooks() 
-        //{
-
-        //}
 
         private bool BookExists(int id)
         {

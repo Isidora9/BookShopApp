@@ -16,7 +16,7 @@ namespace BookShop.Domain.Entities
         public ICollection<OrderItem>? OrderItems { get; set; }
         [DisplayFormat(DataFormatString = "${0:N2}")]
         public decimal TotalPrice { get; set; }
-        public bool Status { get; set; }
+        public bool Shipped { get; set; }
 
         public decimal CalculateTotalPrice() 
         {
