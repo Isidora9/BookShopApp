@@ -184,7 +184,7 @@ namespace BookShop.Controllers
             return View();
         }
 
-        private int CalculateDiscount(ApplicationUser user)
+        public int CalculateDiscount(ApplicationUser user)
         {
             int disount = 0;
             var shippedOrders = _context.Orders
@@ -207,7 +207,6 @@ namespace BookShop.Controllers
                     disount = 20;
                 }
             }
-
             return disount;
         }
 

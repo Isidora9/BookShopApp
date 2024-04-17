@@ -95,9 +95,20 @@ img{
         <figure class="py-2">
             <blockquote>
                 <p class="mb-0">@item.Content</p>
-                <div class="rating-container">
-                    <p class="mb-0">@item.Rating/5</p>
+                <div class="row justify-content-between">
+                    <div class="col-4">
+                        <div class="rating-container">
+                            <p class="mb-0">@item.Rating/5</p>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
+                        }
+                    </div>
                 </div>
+                
             </blockquote>
             <figcaption class="blockquote-footer">
                 @item.User.UserName, <cite title="Source Title">@item.CreatedAt</cite>
@@ -110,7 +121,6 @@ img{
 @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
 {
     <form class="my-5" asp-action="AddComment" method="post">
-
 
         <div class="rate">
             <input type="radio" id="star5" name="rating" value="5" />
@@ -136,7 +146,7 @@ img{
 <style>
 
     .good-rating {
-        border: 2px solid #9bfab0;
+        border: 2px solid #8FBC8B;
         background-color: #d0fdd7;
         color: #4cad4c;
     }

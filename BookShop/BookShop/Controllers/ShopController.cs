@@ -178,25 +178,6 @@ namespace BookShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //public IActionResult FilterByGenre(string genre)
-        //{
-        //    List<Book> filteredBooks = _context.Books.Where(b => b.Genre == genre).ToList();
-        //    return View(filteredBooks);
-        //}
-
-        //private List<Book> FindBooksByGenre(string genre)
-        //{
-        //    List<Book> filteredBooks = _context.Books.Where(b => b.Genre == genre).ToList();
-        //    return filteredBooks;
-        //}
-
-        //private List<Book> FindBooksByAuthor(List<Book> books, string author)
-        //{
-        //    List<Book> filteredBooks = books.Where(b => b.Author == author).ToList();
-        //    return filteredBooks;
-        //}
-
-
         private bool BookExists(int id)
         {
             return _context.Books.Any(e => e.BookId == id);
