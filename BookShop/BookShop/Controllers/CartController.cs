@@ -13,10 +13,10 @@ namespace BookShop.Controllers
     {
         //private static List<OrderItem> _cartItems = new List<OrderItem>();
 
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CartController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public CartController(IApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -52,8 +52,6 @@ namespace BookShop.Controllers
             discount = CalculateDiscount(user);
             ViewBag.LoyaltyDiscount = discount;
 
-
-
             return View(activeOrder);
         }
 
@@ -77,8 +75,6 @@ namespace BookShop.Controllers
                 _context.Orders.Add(activeOrder);
                 await _context.SaveChangesAsync();
             }
-
-
 
             var book = _context.Books.FirstOrDefault(b => b.BookId == bookId);
             if (book == null)
@@ -209,6 +205,5 @@ namespace BookShop.Controllers
             }
             return disount;
         }
-
     }
 }

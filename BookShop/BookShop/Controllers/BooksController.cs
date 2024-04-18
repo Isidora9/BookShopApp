@@ -15,11 +15,11 @@ namespace BookShop.Controllers
     [Authorize(Roles = "Admin")]
     public class BooksController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public BooksController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public BooksController(IApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;

@@ -159,7 +159,7 @@ else
                 Total price:
             </div>
             <div class="col-1 priceCalc totalPrice">
-                $@((@Model.TotalPrice + 10) * (100 - (int)@ViewBag.LoyaltyDiscount) / 100)
+                $@(Math.Round(((@Model.TotalPrice + 10) * (100 - (int)@ViewBag.LoyaltyDiscount) / 100),2))
             </div>
         </div>
     }
