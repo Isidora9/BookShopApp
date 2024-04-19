@@ -1,4 +1,7 @@
-﻿@model IEnumerable<BookShop.Domain.Entities.Book>
+﻿@using X.PagedList.Mvc.Core
+@* @model IEnumerable<BookShop.Domain.Entities.Book> *@
+
+@model BookViewModel
 
 @{
     ViewData["Title"] = "Shop";
@@ -37,6 +40,8 @@
                 <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "" })">All</a></li>
                 <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Fantasy" })">Fantasy</a></li>
                 <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Children's literature" })">Children's literature</a></li>
+                <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Novel" })">Novel</a></li>
+                <li><a class="dropdown-item" href="@Url.Action("Index", new { genre = "Classic" })">Classic</a></li>
             </ul>
             <input style="width:200px;" class="form-control me-2" type="search" placeholder="Search by author" aria-label="Search" name="author"/>
             <button class="btn btn-secondary" type="submit">Search</button>
@@ -46,7 +51,7 @@
 
 <div class="container">
     <div class="row">
-@foreach (var item in Model)
+@foreach (var item in Model.AllBooks)
 {
     <div class="card m-2" style="width: 15rem;">
         <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
@@ -72,7 +77,17 @@
     </div>
 }
 </div>
+    Page @(Model.AllBooks.PageCount < Model.AllBooks.PageNumber ? 0 : Model.AllBooks.PageNumber) of @Model.AllBooks.PageCount
+    @Html.PagedListPager(Model.AllBooks, page => Url.Action("Index", new { page }))
 </div>
+
+
+<h2>Best Selling Books</h2>
+@Html.Partial("_BookListBestSelling", Model.BestSellingBooks)
+
+<h2>Best Rated Books</h2>
+@Html.Partial("_BookListBestRated", Model.BestRatedBooks)
+
 @if (TempData["ErrorMessage"] != null)
 {
     <script>
@@ -80,9 +95,3 @@
     </script>
 }
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-@* <script>
-    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-        return new bootstrap.Dropdown(dropdownToggleEl)
-    })
-</script> *@

@@ -49,15 +49,21 @@ namespace BookShop.Controllers
             {
                 return NotFound();
             }
-
-            foreach (var item in book.Comments)
+            if (book.Comments.Count != 0)
             {
-                bookRating += item.Rating;
-            }
+                foreach (var item in book.Comments)
+                {
+                    bookRating += item.Rating;
+                }
 
-            bookRating /= book.Comments.Count;
+                bookRating /= book.Comments.Count;
+                ViewBag.BookRating = string.Format("{0:0.0}", bookRating);
+            }
+            else
+            {
+                ViewBag.BookRating = "empty";
+            }
             //ViewBag.BookRating = Math.Round(bookRating, 1);
-            ViewBag.BookRating = string.Format("{0:0.0}", bookRating);
             return View(book);
         }
 

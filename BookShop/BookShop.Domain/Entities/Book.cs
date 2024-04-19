@@ -22,5 +22,14 @@ namespace BookShop.Domain.Entities
         [Display(Name = "Available")]
         public int AvailableBookNum { get; set; }
         public ICollection<Comment>? Comments { get; set; }
+        public double AverageRating
+        {
+            get
+            {
+                if (Comments == null || Comments.Count == 0)
+                    return 0;
+                return Math.Round(Comments.Average(c => c.Rating), 1);
+            }
+        }
     }
 }

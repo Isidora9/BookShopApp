@@ -21,28 +21,32 @@ img{
             Rating
         </dt>
         <dd class="col-sm-10">
-            @if (Convert.ToDouble(@ViewBag.BookRating) >= 4)
+            @if (ViewBag.BookRating == "empty")
             {
-                <div class="book-rating good-rating px-2">
-                    @ViewBag.BookRating
-                </div>
+                <p>No reviews</p>
             }
-            @if (Convert.ToDouble(@ViewBag.BookRating) < 4 && Convert.ToDouble(@ViewBag.BookRating) >= 2.5)
+            else
             {
-                <div class="book-rating okay-rating px-2">
-                    @ViewBag.BookRating
-                </div>
-            }
-            @if (Convert.ToDouble(@ViewBag.BookRating) < 2.5)
-            {
-                <div class="book-rating bad-rating px-2">
-                    @ViewBag.BookRating
-                </div>
+                @if (Convert.ToDouble(@ViewBag.BookRating) >= 4)
+                {
+                    <div class="book-rating good-rating px-2">
+                        @ViewBag.BookRating
+                    </div>
+                }
+                @if (Convert.ToDouble(@ViewBag.BookRating) < 4 && Convert.ToDouble(@ViewBag.BookRating) >= 2.5)
+                {
+                    <div class="book-rating okay-rating px-2">
+                        @ViewBag.BookRating
+                    </div>
+                }
+                @if (Convert.ToDouble(@ViewBag.BookRating) < 2.5)
+                {
+                    <div class="book-rating bad-rating px-2">
+                        @ViewBag.BookRating
+                    </div>
+                }
             }
 
-            @* <div class="book-rating px-2">
-                @ViewBag.BookRating
-            </div> *@
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Author)
@@ -118,7 +122,7 @@ img{
     }
 }
 
-@if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+@if ( User.IsInRole("User"))
 {
     <form class="my-5" asp-action="AddComment" method="post">
 
