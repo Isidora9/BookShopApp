@@ -56,16 +56,16 @@ namespace BookShop.Controllers
         //}
 
 
-        public async Task<IActionResult> Index(string genre, string author, int? page, int? pageBestSelling, int? pageBestRated)
+        public async Task<IActionResult> Index(string genre, string author, int? page)
         {
             var pageNumber = page ?? 1;
             var pageSize = 5;
 
-            var pageNumberBestSelling = pageBestSelling ?? 1;
-            var pageSizeBestSelling = 5;
+            //var pageNumberBestSelling = pageBestSelling ?? 1;
+            //var pageSizeBestSelling = 5;
 
-            var pageNumberBestRated = pageBestRated ?? 1;
-            var pageSizeBestRated = 5;
+            //var pageNumberBestRated = pageBestRated ?? 1;
+            //var pageSizeBestRated = 5;
 
             ViewBag.SelectedGenre = genre;
             IEnumerable<Book> books;
@@ -93,8 +93,10 @@ namespace BookShop.Controllers
                 }
             }
             var allBooks = await books.ToPagedListAsync(pageNumber, pageSize);
-            var bestRatedBooks = await GetBestRatedBooks().ToPagedListAsync(pageNumberBestRated, pageSizeBestRated);
-            var bestSellingBooks = await GetBestSellingBooks().ToPagedListAsync(pageNumberBestSelling, pageSizeBestSelling);
+            //var bestRatedBooks = await GetBestRatedBooks().ToPagedListAsync(pageNumberBestRated, pageSizeBestRated);
+            //var bestSellingBooks = await GetBestSellingBooks().ToPagedListAsync(pageNumberBestSelling, pageSizeBestSelling);
+            var bestRatedBooks = GetBestRatedBooks();
+            var bestSellingBooks = GetBestSellingBooks();
             var model = new BookViewModel
             {
                 AllBooks = allBooks,
@@ -106,7 +108,7 @@ namespace BookShop.Controllers
         }
 
 
-        private IQueryable<Book> GetBestSellingBooks()
+        private List<Book> GetBestSellingBooks()
         {
             var shippedOrders = _context.Orders.Where(o => o.Shipped == true);
 
@@ -131,11 +133,16 @@ namespace BookShop.Controllers
                 mostSoldBooksQuery.Add(_context.Books.FirstOrDefault(o => o.BookId == id));
             }
 
-            return mostSoldBooksQuery.AsQueryable();
+            if (mostSoldBooksQuery.Count > 5)
+            {
+                List<Book> top5SellingBooks = mostSoldBooksQuery.Take(5).ToList();
+                return top5SellingBooks;
+            }
+            return mostSoldBooksQuery;
         }
 
 
-        private IQueryable<Book> GetBestRatedBooks()
+        private List<Book> GetBestRatedBooks()
         {
             var booksWithRatings = _context.Books
                 .Select(book => new
@@ -149,8 +156,9 @@ namespace BookShop.Controllers
             var booksWithHighestRating = booksWithRatings
                 .Where(x => x.AverageRating >= 4)
                 .Select(x => x.Book)
+                .Take(5)
                 .ToList();
-            return booksWithHighestRating.AsQueryable();
+            return booksWithHighestRating;
         }
 
 

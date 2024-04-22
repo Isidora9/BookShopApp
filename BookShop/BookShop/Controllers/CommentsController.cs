@@ -22,8 +22,8 @@ namespace BookShop.Controllers
         // GET: Comments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Comments.Include(c => c.Book).Include(c => c.User);
-            return View(await applicationDbContext.ToListAsync());
+            var comments = _context.Comments.Include(c => c.Book).Include(c => c.User);
+            return View(await comments.ToListAsync());
         }
 
         // GET: Comments/Details/5
