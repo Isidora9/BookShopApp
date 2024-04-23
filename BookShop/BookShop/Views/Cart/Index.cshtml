@@ -12,27 +12,27 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th></th>
+    <table class="table table-hover">
+        <thead class="table-border">
+            <tr class="table-border">
+                <th class="table-border"></th>
+                <th class="table-border">Title</th>
+                <th class="table-border">Price</th>
+                <th class="table-border">Quantity</th>
+                <th class="table-border">Total</th>
+                <th class="table-border"></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-border">
             @foreach (var item in Model.OrderItems)
             {
-                <tr>
-                    <td>
+                <tr class="table-border">
+                    <td class="table-border">
                         <img src="@item.Book.ImgUrl" height="100px"></img>
                     </td>
-                    <td>@item.Book.Title</td>
-                    <td>@Html.DisplayFor(model => item.Book.Price)</td>
-                    <td>
+                    <td class="table-border">@item.Book.Title</td>
+                    <td class="table-border">@Html.DisplayFor(model => item.Book.Price)</td>
+                    <td class="table-border">
                         <form id="quantityForm_@item.OrderItemId" asp-action="UpdateQuantity" asp-controller="Cart" method="post">
                             <input type="hidden" name="itemId" value="@item.OrderItemId" />
                             <select name="quantity" class="quantity">
@@ -50,8 +50,8 @@ else
                             </select>
                         </form>
                     </td>
-                    <td>@((item.Quantity * item.Book.Price).ToString("$0.00"))</td>
-                    <td>
+                    <td class="table-border">@((item.Quantity * item.Book.Price).ToString("$0.00"))</td>
+                    <td class="table-border">
                         <form asp-action="RemoveFromCart" method="post">
                             <input type="hidden" name="orderItemId" value="@item.OrderItemId" />
                             <button type="submit" class="btn btn-sm btn-secondary">Remove</button>
@@ -64,10 +64,11 @@ else
         <td class="no-bottom"></td>
         <td class="no-bottom"></td>
         <td class="no-bottom"></td>
-        <td class="no-bottom">Total price:</td>
-        <td class="no-bottom">
+        <td class="no-bottom price">Total price:</td>
+        <td class="no-bottom price">
                 @Html.DisplayFor(model => model.TotalPrice)
         </td>
+        <td class="no-bottom"></td>
         </tfoot>
     </table>
 }
@@ -174,6 +175,10 @@ else
 
 
 <style>
+    .table-border {
+        border-color: darkgray !important;
+    }
+
     .no-bottom {
         border-bottom: none
     }
@@ -187,6 +192,24 @@ else
         color: crimson;
         font-size: 20px;
     }
+
+    .price {
+        font-weight: bold;
+        color: crimson !important;
+    }
+
+    table {
+        background-color: transparent !important;
+    }
+
+    thead, tbody, tfoot {
+        background-color: transparent !important;
+    }
+
+    td, th {
+        background-color: transparent !important;
+    }
+
 </style>
 
 @section scripts {
