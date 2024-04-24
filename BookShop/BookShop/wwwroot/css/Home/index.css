@@ -1,0 +1,22 @@
+﻿
+.philosopher-bold-italic {
+    font-family: "Philosopher", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    color: #3e3f3abf;
+}
+
+.p1 {
+    text-indent: 4em;
+}
+
+p {
+    text-align: justify;
+}
+
+.links-container {
+    /*background-color: rgba(255, 255, 255, 0.8);*/
+    background-color: white;
+    border-radius: 10px;
+    max-width: 500px;
+}

@@ -1,5 +1,4 @@
 ﻿@using X.PagedList.Mvc.Core
-@* @model IEnumerable<BookShop.Domain.Entities.Book> *@
 
 @model BookViewModel
 
@@ -12,6 +11,10 @@
     .totalPrice {
         font-weight: bold;
         color: crimson;
+    }
+
+    .row {
+        margin:auto;
     }
 
     .container3 {
@@ -87,12 +90,31 @@
         border-color: #325d88;
     }
 
+    .form-control{
+        width: 70px;
+    }
+
+    .input-quantity {
+        input-quantity;
+    }
+
+    .filter-container {
+        margin-right: 90px;
+        padding: 10px;
+    }
+
+    .philosopher-bold-italic {
+        font-family: "Philosopher", sans-serif;
+        font-weight: 700;
+        font-style: italic;
+        color: #3e3f3abf;
+    }
 
 </style>
 
-<h1>Shop</h1>
+<h1 class="philosopher-bold-italic p-4 mt-3">Take a look at our books...</h1>
 
-<div>
+<div class="filter-container">
     <div class="dropdown">
         <form class="d-flex justify-content-end" asp-action="Index" asp-controller="Shop" method="get">
             <button type="button" class="btn btn-secondary me-4 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -120,53 +142,41 @@
 
 <div class="container">
     <div class="row">
-@foreach (var item in Model.AllBooks)
-{
-    <div class="card pt-2 m-2" style="width: 15rem;">
-        <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-            <div class="container3">
-                <img src="@item.ImgUrl" class="card-img-top rounded-2" alt="@item.Title" height="300px" />
-            </div>
-        </a>
-        <div class="card-body px-0">
-            <h5 class="card-title">@item.Title</h5>
-            <div class="below-title">
-                <p class="card-text mb-0 totalPrice">@Html.DisplayFor(model => item.Price)</p>
-                <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">See details</a>
-                <p class="card-text">Available: @Html.DisplayFor(model => item.AvailableBookNum)</p>
-                <form asp-controller="Cart" asp-action="AddToCart" method="post">
-                    <input type="hidden" name="bookId" value="@item.BookId" />
-                    <label class="mb-2" for="quantity">Quantity:</label>
-                    <input class="mb-2" type="number" name="quantity" value="1" min="1" max="10" />
-                    <div class="col-12" style="text-align: center;">
-                        <button type="submit" class="btn btn-primary mb-5">Add to cart</button>
+        @foreach (var item in Model.AllBooks)
+        {
+            <div class="card pt-2 m-2" style="width: 15rem;">
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                    <div class="container3">
+                        <img src="@item.ImgUrl" class="card-img-top rounded-2" alt="@item.Title" height="300px" />
                     </div>
-                </form>
+                </a>
+                <div class="card-body px-0">
+                    <h5 class="card-title">@item.Title</h5>
+                    <div class="below-title">
+                        <p class="card-text mb-0 totalPrice">@Html.DisplayFor(model => item.Price)</p>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">See details</a>
+                        <p class="card-text">Available: @Html.DisplayFor(model => item.AvailableBookNum)</p>
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                            <input type="hidden" name="bookId" value="@item.BookId" />
+                            <div class="row mb-2">
+                                <div class="col-sm-5 input-quantity px-0 py-2">
+                                    <label for="quantity">Quantity:</label>
+                                </div>
+                                <div class="col-sm-7 input-quantity px-0">
+                                    <input class="mb-2 form-control" type="number" name="quantity" value="1" min="1" max="10" />
+                                </div>
+                            </div>
+@*                             <label class="mb-2" for="quantity">Quantity:</label>
+                            <input class="mb-2 form-control" type="number" name="quantity" value="1" min="1" max="10" />
+ *@                            <div class="col-12" style="text-align: center;">
+                                <button type="submit" class="btn btn-primary mb-5">Add to cart</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
             </div>
-
-        </div>
-    </div>
-}
-@* </div>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item @(Model.AllBooks.PageNumber == 1 ? "disabled" : "")">
-                <a class="page-link" href="@Url.Action("Index", new { page = Model.AllBooks.PageNumber - 1 })">Previous</a>
-            </li>
-            @for (int i = 1; i <= Model.AllBooks.PageCount; i++)
-            {
-                <li class="page-item @(i == Model.AllBooks.PageNumber ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
-                </li>
-            }
-            <li class="page-item @(Model.AllBooks.PageNumber == Model.AllBooks.PageCount ? "disabled" : "")">
-                <a class="page-link" href="@Url.Action("Index", new { page = Model.AllBooks.PageNumber + 1 })">Next</a>
-            </li>
-        </ul>
-    </nav>
-</div>
- *@
-
+        }
         <div>
             <ul class="pagination">
                 <li class="page-item @(Model.AllBooks.PageNumber == 1 ? "disabled" : "")">
@@ -185,9 +195,10 @@
                 </li>
             </ul>
         </div>
+    </div>
+</div>
 
-
-<h2>Best Sellers</h2>
+<h1 class="philosopher-bold-italic p-4 mt-3">Best Sellers</h1>
 <div class="container">
     <div class="row">
         @foreach (var book in Model.BestSellingBooks)
@@ -209,7 +220,7 @@
     </div>
 </div>
 
-<h2>Top Rated</h2>
+<h1 class="philosopher-bold-italic p-4 mt-3">Top Rated</h1>
 
 <div class="container mb-5">
     <div class="row">
@@ -233,6 +244,9 @@
     </div>
 </div>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
 @if (TempData["ErrorMessage"] != null)
 {

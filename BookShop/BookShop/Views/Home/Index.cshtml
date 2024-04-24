@@ -1,11 +1,58 @@
-﻿@{
+﻿@using BookShop.Domain.Entities
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
+<link href="~/css/home/index.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4 philosopher-bold-italic">Welcome to our shop</h1>
 </div>
+<div class="p-4 pt-3">
+    <p class="text-body-secondary p1">
+        Nestled in the heart of London, there stands a beloved bookshop that has been a haven for book lovers for half a century. Established in 1974, this quaint yet enchanting bookstore has become a cherished institution in the city's literary landscape.
+        Located on a bustling street, the shop's exterior exudes charm with its vintage signage and inviting display windows adorned with carefully curated selections of books. Stepping inside, visitors are greeted by the comforting scent of old paper and the soft rustle of pages being turned.
+    </p>
+    <p class="text-body-secondary">
+        The interior is a labyrinth of shelves, stacked high with books of every genre imaginable. From timeless classics to contemporary bestsellers, from obscure poetry collections to gripping thrillers, there's something to entice every reader's taste.
+        The atmosphere is warm and welcoming, with friendly staff who are always eager to recommend their favorite titles or engage in lively discussions about literature. Regular patrons have come to know the shop as a place where they can lose themselves for hours, browsing through its extensive collection and discovering hidden literary gems.
+        Over the years, the bookstore has weathered many changes, from shifts in the publishing industry to fluctuations in reading trends. Yet, it has remained steadfast in its commitment to fostering a love of reading and serving as a cultural hub for the community.
+    </p>
+    <p class="text-body-secondary">
+        To celebrate its 50th anniversary, the bookstore hosted a series of special events, including author signings, readings, and book-themed parties. Longtime customers reminisced about their first visits to the shop and shared stories of how it had enriched their lives through the magic of literature.
+        As the years pass, this beloved bookshop continues to thrive, its shelves brimming with stories waiting to be discovered, its doors always open to welcome both seasoned bibliophiles and curious newcomers alike. It stands as a testament to the enduring power of books and the timeless joy of reading.
+    </p>
+</div>
+<div class="text-center links-container mx-auto py-4">
+    <h3 class="philosopher-bold-italic text-center">Ready to explore new books?</h3>
+    <a class="btn btn-success btn-lg mb-5" role="button" asp-area="" asp-controller="Shop" asp-action="Index">
+        Browse Our Selection
+    </a>
+    <h3 class="mt-5 philosopher-bold-italic text-center">Not a member yet?</h3>
 
-
-
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <p class="text-center">
+            <a href="#">Register</a>
+            to become a new member or
+            <a href="#">Log in</a>
+            to your account
+        </p>
+    }
+    else
+    {
+        <p class="text-center">
+            <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+            to become a new member or
+            <a asp-area="Identity" asp-page="/Account/Login">Log in</a>
+            to your account
+        </p>
+    }
+</div>

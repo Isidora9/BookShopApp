@@ -5,23 +5,8 @@
     ViewData["Title"] = "Details";
 }
 
-<style>
-
-    img{
-        max-height: 400px;
-    }
-
-    .totalPrice {
-        font-weight: bold;
-        color: crimson;
-        /* font-size: 20px; */
-    }
-
-
-</style>
-
 <div>
-    <h1>@Html.DisplayFor(model => model.Title)</h1>
+    <h1 class="philosopher-bold-italic">@Html.DisplayFor(model => model.Title)</h1>
     <hr />
     <img src="@Html.DisplayFor(model => model.ImgUrl)"/>
     <dl class="row mt-3">
@@ -100,83 +85,92 @@
 <a asp-controller="Shop" asp-action="Index" class="btn btn-primary">Back to Shop</a>
 
 <h4 class="mt-5 mb-3">Comments</h4>
-@if (Model.Comments != null)
-{
-    @foreach (var item in Model.Comments)
+<div class="comments-container">
+    @if (Model.Comments != null)
     {
-        <figure class="py-2">
-            <blockquote>
-                <p class="mb-0">@item.Content</p>
-                <div class="row justify-content-between">
-                    <div class="col-4">
-                        <div class="rating-container">
-                            <p class="mb-0">@item.Rating/5</p>
+        @foreach (var item in Model.Comments)
+        {
+            <figure class="py-2">
+                <blockquote>
+                    <p class="mb-0">@item.Content</p>
+                    <div class="row justify-content-between">
+                        <div class="col-4">
+                            <div class="rating-container">
+                                <p class="mb-0">@item.Rating/5</p>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
+                            }
+                            @if (User.IsInRole("User") && item.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                            {
+                                <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
+                            }
                         </div>
                     </div>
-                    <div class="col-1">
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                        {
-                            <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
-                        }
-                        @if (User.IsInRole("User") && item.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
-                        {
-                            <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
-                        }
-                    </div>
-                </div>
-                
-            </blockquote>
-            <figcaption class="blockquote-footer">
-                @item.User.UserName, <cite title="Source Title">@item.CreatedAt</cite>
-            </figcaption>
-        </figure>
-        <hr></hr>
+
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    @item.User.UserName, <cite title="Source Title">@item.CreatedAt</cite>
+                </figcaption>
+            </figure>
+            <hr></hr>
+        }
     }
-}
 
-@if ( User.IsInRole("User"))
-{
-    <form class="my-5" asp-action="AddComment" method="post">
+    @if (User.IsInRole("User"))
+    {
+        <form class="my-5" asp-action="AddComment" method="post">
 
-        <div class="rate">
-            <input type="radio" id="star5" name="rating" value="5" />
-            <label for="star5" title="text">5 stars</label>
-            <input type="radio" id="star4" name="rating" value="4" />
-            <label for="star4" title="text">4 stars</label>
-            <input type="radio" id="star3" name="rating" value="3" />
-            <label for="star3" title="text">3 stars</label>
-            <input type="radio" id="star2" name="rating" value="2" />
-            <label for="star2" title="text">2 stars</label>
-            <input type="radio" id="star1" name="rating" value="1" />
-            <label for="star1" title="text">1 star</label>
-        </div>
+            <div class="rate">
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="text">1 star</label>
+            </div>
 
-        <input type="hidden" name="bookId" value="@Model.BookId" />
-        <div class="mb-3 col-sm-6">
-            <textarea class="form-control" style="border-color: #808080;" id="comment" name="content" rows="4" placeholder="Enter your comment here..." required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Comment</button>
-    </form>
-}
+            <input type="hidden" name="bookId" value="@Model.BookId" />
+            <div class="mb-3 col-sm-6">
+                <textarea class="form-control" style="border-color: #808080;" id="comment" name="content" rows="4" placeholder="Enter your comment here..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Comment</button>
+        </form>
+    }
+</div>
 
 <style>
 
+    .philosopher-bold-italic {
+        font-family: "Philosopher", sans-serif;
+        font-weight: 700;
+        font-style: italic;
+        color: #3e3f3abf;
+    }
+
     .good-rating {
-        border: 2px solid #8FBC8B;
-        background-color: #d0fdd7;
-        color: #4cad4c;
+        background-color: #93c54b;
+        color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     }
 
     .okay-rating {
-        border: 2px solid #eced87;
-        background-color: #fffee1;
-        color: #abae4b;
+        background-color: #ffc107;
+        color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     }
 
     .bad-rating {
-        border: 2px solid #ff9e8e;
-        background-color: #ffdece;
-        color: #ed5c53;
+        background-color: #d9534f;
+        color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     }
 
     .book-rating {
@@ -191,6 +185,23 @@
         padding: 5px;
         border: 2px solid #ccc;
         border-radius: 5px;
+    }
+
+    .comments-container {
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+        padding: 20px;
+        /* max-width: 1000px; */
+    }
+
+    img {
+        max-height: 400px;
+    }
+
+    .totalPrice {
+        font-weight: bold;
+        color: crimson;
+        /* font-size: 20px; */
     }
 
     .rate {
@@ -236,6 +247,10 @@
     }
 
 </style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
 @section scripts {
     @if (TempData["ErrorMessage"] != null)
