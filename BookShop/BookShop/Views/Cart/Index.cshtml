@@ -5,11 +5,11 @@
 }
 
 <div class="p-5">
-    <h4>Shopping Cart</h4>
+    <h4 class="philosopher-bold-italic">Shopping Cart</h4>
 
     @if (Model.OrderItems.Count == 0)
     {
-        <p>Your cart is empty.</p>
+        <p>Your shopping cart is empty.</p>
     }
     else
     {
@@ -78,7 +78,7 @@
     </div>
 
 
-    <h4 class="mt-5">Delivery Address</h4><hr></hr>
+    <h4 class="mt-5 philosopher-bold-italic">Delivery Address</h4><hr></hr>
 
     <form class="row g-3 m-5">
         <div class="col-md-4 my-3">
@@ -150,7 +150,7 @@
                     Loyalty discount:
                 </div>
                 <div class="col-1 priceCalc">
-                    -@ViewBag.LoyaltyDiscount%
+                    - @ViewBag.LoyaltyDiscount%
                 </div>
             </div>
             <div class="col-12 row justify-content-end mx-0 px-0">
@@ -175,7 +175,6 @@
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 
 <style>
     .table-border {
@@ -217,14 +216,29 @@
         width: 70px !important;
     }
 
+    td {
+        vertical-align: middle !important;
+    }
+
+    .philosopher-bold-italic {
+        font-family: "Philosopher", sans-serif;
+        font-weight: 700;
+        font-style: italic;
+        color: #353535;
+    }
+
 </style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
 @section scripts {
     <script>
         $(document).ready(function () {
             $('.quantity').on('change', function () {
-                var formId = $(this).closest('form').attr('id'); // Get the ID of the closest form
-                $('#' + formId).submit(); // Submit the form with the corresponding ID
+                var formId = $(this).closest('form').attr('id');
+                $('#' + formId).submit();
             });
         });
     </script>
