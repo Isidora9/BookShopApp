@@ -6,111 +6,13 @@
     ViewData["Title"] = "Shop";
 }
 
-<style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link href="~/css/shop/index.css" rel="stylesheet" />
 
-    .totalPrice {
-        font-weight: bold;
-        color: crimson;
-    }
-
-    .row {
-        margin:auto;
-    }
-
-    .container3 {
-        width: 100%;
-        height: 300px;
-        overflow: hidden;
-    }
-
-    .container4 {
-        width: 100%;
-    }
-
-    .card-body {
-        position: relative;
-        height: 300px;
-        display: flex;
-        justify-content: center;
-    }
-
-    .card {
-        position: relative;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        background-color: rgba(255, 255, 255, 0.8);
-    }
-
-    .card-body2 {
-        position: relative;
-        height: 200px;
-    }
-
-    .below-title {
-        position: absolute;
-        bottom: 0;
-        width: 90%;
-    }
-
-    .card-title {
-        width: 90%;
-        text-align: left;
-    }
-
-    .badge2 {
-        position: absolute;
-        top: -20px;
-        right: 40px;
-        background-color: #ffcc00;
-        color: #fff;
-        padding: 15px 25px;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 20px;
-        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        clip-path: polygon(50% 0%, 90% 25%, 90% 75%, 50% 100%, 10% 75%, 10% 25%);
-        text-shadow: 1px 1px 1px rgba(0,0,0,0.7);
-    }
-
-    .badge2:before {
-        content: "";
-        position: absolute;
-        bottom: -30px;
-        right: 25px;
-        width: 80px;
-        height: 40px;
-        background-color: #ffcc00;
-        border-radius: 15px;
-        clip-path: polygon(0% 50%, 35% 0%, 65% 0%, 100% 50%, 65% 100%, 35% 100%);
-    }
-
-    .pagination .page-item.active .page-link {
-        z-index: 3;
-        color: #fff;
-        background-color: #325d88;
-        border-color: #325d88;
-    }
-
-    .form-control{
-        width: 70px;
-    }
-
-    .input-quantity {
-        input-quantity;
-    }
-
-    .filter-container {
-        margin-right: 90px;
-        padding: 10px;
-    }
-
-    .philosopher-bold-italic {
-        font-family: "Philosopher", sans-serif;
-        font-weight: 700;
-        font-style: italic;
-        color: #3e3f3abf;
-    }
-
-</style>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/notify.min.js"></script>
 
 <h1 class="philosopher-bold-italic p-4 mt-3">Take a look at our books...</h1>
 
@@ -204,7 +106,11 @@
         @foreach (var book in Model.BestSellingBooks)
         {
             <div class="card pt-2 m-2" style="width: 15rem;">
-                <span class="badge2">@(Model.BestSellingBooks.IndexOf(book) + 1)</span>
+                @* <div class="bookmark">1</div> *@
+                <div class="bookmark position-absolute d-flex justify-content-center align-items-center">
+                    <span class="bookmark-number">@(Model.BestSellingBooks.IndexOf(book) + 1)</span>
+                </div>
+                @* <span class="badge2">@(Model.BestSellingBooks.IndexOf(book) + 1)</span> *@
                 <div class="container4">
                     <img src="@book.ImgUrl" class="card-img-top rounded-2" alt="@book.Title" height="300px" />
                 </div>
@@ -244,14 +150,11 @@
     </div>
 </div>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
 @if (TempData["ErrorMessage"] != null)
 {
     <script>
-        alert("@TempData["ErrorMessage"]");
+        $.notify("@TempData["ErrorMessage"]", { globalPosition: 'top center', className: 'alert alert-success' });
     </script>
 }
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

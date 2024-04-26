@@ -23,49 +23,10 @@ namespace BookShop.Controllers
             _context = context;
         }
 
-        // GET: Shop
-        //public async Task<IActionResult> Index(string genre, string author)
-        //{
-        //    ViewBag.SelectedGenre = genre;
-        //    IEnumerable<Book> books;
-
-        //    if (!string.IsNullOrEmpty(genre))
-        //    {
-        //        if (!string.IsNullOrEmpty(author))
-        //        {
-        //            books = _context.Books.Where(b => b.Genre == genre).Where(b => b.Author.Contains(author)).ToList();
-        //        }
-        //        else
-        //        {
-        //            books = _context.Books.Where(b => b.Genre == genre);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (!string.IsNullOrEmpty(author))
-        //        {
-        //            books = _context.Books.Where(b => b.Author.Contains(author)).ToList();
-        //        }
-        //        else
-        //        {
-        //            books = _context.Books.ToList();
-        //        }
-        //    }
-
-        //    return View(books);
-        //}
-
-
         public async Task<IActionResult> Index(string genre, string author, int? page)
         {
             var pageNumber = page ?? 1;
             var pageSize = 5;
-
-            //var pageNumberBestSelling = pageBestSelling ?? 1;
-            //var pageSizeBestSelling = 5;
-
-            //var pageNumberBestRated = pageBestRated ?? 1;
-            //var pageSizeBestRated = 5;
 
             ViewBag.SelectedGenre = genre;
             IEnumerable<Book> books;
@@ -93,8 +54,6 @@ namespace BookShop.Controllers
                 }
             }
             var allBooks = await books.ToPagedListAsync(pageNumber, pageSize);
-            //var bestRatedBooks = await GetBestRatedBooks().ToPagedListAsync(pageNumberBestRated, pageSizeBestRated);
-            //var bestSellingBooks = await GetBestSellingBooks().ToPagedListAsync(pageNumberBestSelling, pageSizeBestSelling);
             var bestRatedBooks = GetBestRatedBooks();
             var bestSellingBooks = GetBestSellingBooks();
             var model = new BookViewModel
@@ -105,60 +64,6 @@ namespace BookShop.Controllers
             };
 
             return View(model);
-        }
-
-
-        private List<Book> GetBestSellingBooks()
-        {
-            var shippedOrders = _context.Orders.Where(o => o.Shipped == true);
-
-            var orderItemsPerOrder = shippedOrders
-                .SelectMany(o => o.OrderItems);
-            var groupedOrderItems = orderItemsPerOrder
-                .GroupBy(oi => oi.BookId)
-                .Select(g => new
-                {
-                    BookId = g.Key,
-                    TotalQuantitySold = g.Sum(oi => oi.Quantity)
-                });
-
-            var mostSoldBooks = groupedOrderItems
-                .OrderByDescending(g => g.TotalQuantitySold)
-                .Select(g => g.BookId);
-
-            List<Book> mostSoldBooksQuery = new List<Book>();
-
-            foreach (int id in mostSoldBooks)
-            {
-                mostSoldBooksQuery.Add(_context.Books.FirstOrDefault(o => o.BookId == id));
-            }
-
-            if (mostSoldBooksQuery.Count > 5)
-            {
-                List<Book> top5SellingBooks = mostSoldBooksQuery.Take(5).ToList();
-                return top5SellingBooks;
-            }
-            return mostSoldBooksQuery;
-        }
-
-
-        private List<Book> GetBestRatedBooks()
-        {
-            var booksWithRatings = _context.Books
-                .Select(book => new
-                {
-                    Book = book,
-                    AverageRating = book.Comments != null && book.Comments.Any() ? book.Comments.Average(comment => comment.Rating) : 0
-                })
-                .ToList();
-            booksWithRatings = booksWithRatings.OrderByDescending(x => x.AverageRating).ToList();
-            //var booksWithHighestRating = booksWithRatings.Select(x => x.Book).ToList();
-            var booksWithHighestRating = booksWithRatings
-                .Where(x => x.AverageRating >= 4)
-                .Select(x => x.Book)
-                .Take(5)
-                .ToList();
-            return booksWithHighestRating;
         }
 
 
@@ -289,6 +194,57 @@ namespace BookShop.Controllers
         private bool BookExists(int id)
         {
             return _context.Books.Any(e => e.BookId == id);
+        }
+
+        private List<Book> GetBestSellingBooks()
+        {
+            var shippedOrders = _context.Orders.Where(o => o.Shipped == true);
+
+            var orderItemsPerOrder = shippedOrders
+                .SelectMany(o => o.OrderItems);
+            var groupedOrderItems = orderItemsPerOrder
+                .GroupBy(oi => oi.BookId)
+                .Select(g => new
+                {
+                    BookId = g.Key,
+                    TotalQuantitySold = g.Sum(oi => oi.Quantity)
+                });
+
+            var mostSoldBooks = groupedOrderItems
+                .OrderByDescending(g => g.TotalQuantitySold)
+                .Select(g => g.BookId);
+
+            List<Book> mostSoldBooksQuery = new List<Book>();
+
+            foreach (int id in mostSoldBooks)
+            {
+                mostSoldBooksQuery.Add(_context.Books.FirstOrDefault(o => o.BookId == id));
+            }
+
+            if (mostSoldBooksQuery.Count > 5)
+            {
+                List<Book> top5SellingBooks = mostSoldBooksQuery.Take(5).ToList();
+                return top5SellingBooks;
+            }
+            return mostSoldBooksQuery;
+        }
+
+        private List<Book> GetBestRatedBooks()
+        {
+            var booksWithRatings = _context.Books
+                .Select(book => new
+                {
+                    Book = book,
+                    AverageRating = book.Comments != null && book.Comments.Any() ? book.Comments.Average(comment => comment.Rating) : 0
+                })
+                .ToList();
+            booksWithRatings = booksWithRatings.OrderByDescending(x => x.AverageRating).ToList();
+            var booksWithHighestRating = booksWithRatings
+                .Where(x => x.AverageRating >= 4)
+                .Select(x => x.Book)
+                .Take(5)
+                .ToList();
+            return booksWithHighestRating;
         }
     }
 }

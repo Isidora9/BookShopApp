@@ -1,0 +1,96 @@
+﻿
+.philosopher-bold-italic {
+    font-family: "Philosopher", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    color: #3e3f3abf;
+}
+
+.good-rating {
+    background-color: #93c54b;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.okay-rating {
+    background-color: #ffc107;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.bad-rating {
+    background-color: #d9534f;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.book-rating {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.rating-container {
+    display: inline-block;
+    padding: 5px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+.comments-container {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+img {
+    max-height: 400px;
+}
+
+.totalPrice {
+    font-weight: bold;
+    color: crimson;
+}
+
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+
+.rate:not(:checked) > input {
+    position: absolute;
+    left: -9999px;
+}
+
+.rate:not(:checked) > label {
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 30px;
+    color: #ccc;
+}
+
+    .rate:not(:checked) > label:before {
+        content: '★ ';
+    }
+
+.rate > input:checked ~ label {
+    color: #ffc700;
+}
+
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;
+}
+
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}

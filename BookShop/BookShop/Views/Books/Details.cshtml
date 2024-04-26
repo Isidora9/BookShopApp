@@ -5,76 +5,88 @@
     ViewData["Title"] = "Details";
 }
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link href="~/css/book/details.css" rel="stylesheet" />
+
 <div>
     <h1 class="philosopher-bold-italic">@Html.DisplayFor(model => model.Title)</h1>
     <hr />
-    <img src="@Html.DisplayFor(model => model.ImgUrl)"/>
-    <dl class="row mt-3">
-        <dt class="col-sm-2">
-            Rating
-        </dt>
-        <dd class="col-sm-10">
-            @if (ViewBag.BookRating == "empty")
-            {
-                <p>No reviews</p>
-            }
-            else
-            {
-                @if (Convert.ToDouble(@ViewBag.BookRating) >= 4)
-                {
-                    <div class="book-rating good-rating px-2">
-                        @ViewBag.BookRating
-                    </div>
-                }
-                @if (Convert.ToDouble(@ViewBag.BookRating) < 4 && Convert.ToDouble(@ViewBag.BookRating) >= 2.5)
-                {
-                    <div class="book-rating okay-rating px-2">
-                        @ViewBag.BookRating
-                    </div>
-                }
-                @if (Convert.ToDouble(@ViewBag.BookRating) < 2.5)
-                {
-                    <div class="book-rating bad-rating px-2">
-                        @ViewBag.BookRating
-                    </div>
-                }
-            }
+    <div class="row">
+        <div class="col-3 py-2">
+            <img src="@Html.DisplayFor(model => model.ImgUrl)" />
+        </div>
+        <div class="col-9">
+            <dl class="row mt-3">
+                <dt class="col-sm-2">
+                    Rating
+                </dt>
+                <dd class="col-sm-10">
+                    @if (ViewBag.BookRating == "empty")
+                    {
+                        <p>No reviews</p>
+                    }
+                    else
+                    {
+                        @if (Convert.ToDouble(@ViewBag.BookRating) >= 4)
+                        {
+                            <div class="book-rating good-rating px-2">
+                                @ViewBag.BookRating
+                            </div>
+                        }
+                        @if (Convert.ToDouble(@ViewBag.BookRating) < 4 && Convert.ToDouble(@ViewBag.BookRating) >= 2.5)
+                        {
+                            <div class="book-rating okay-rating px-2">
+                                @ViewBag.BookRating
+                            </div>
+                        }
+                        @if (Convert.ToDouble(@ViewBag.BookRating) < 2.5)
+                        {
+                            <div class="book-rating bad-rating px-2">
+                                @ViewBag.BookRating
+                            </div>
+                        }
+                    }
 
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Genre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10 totalPrice">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-        {
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.AvailableBookNum)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.AvailableBookNum)
-            </dd>
-        }
-    </dl>
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Author)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Author)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Genre)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Genre)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+                <dd class="col-sm-10 totalPrice">
+                    @Html.DisplayFor(model => model.Price)
+                </dd>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.AvailableBookNum)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.AvailableBookNum)
+                    </dd>
+                }
+            </dl>
+
+        </div>
+    </div>
 </div>
 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
@@ -82,9 +94,9 @@
         <a asp-action="Edit" asp-route-id="@Model?.BookId" class="btn btn-primary mb-2">Edit</a>
     </div>
 }
-<a asp-controller="Shop" asp-action="Index" class="btn btn-primary">Back to Shop</a>
+<a asp-controller="Shop" asp-action="Index" class="btn btn-primary mt-5">Back to Shop</a>
 
-<h4 class="mt-5 mb-3">Comments</h4>
+<h3 class="mt-5 mb-3 philosopher-bold-italic">Comments</h3>
 <div class="comments-container">
     @if (Model.Comments != null)
     {
@@ -146,123 +158,29 @@
     }
 </div>
 
-<style>
-
-    .philosopher-bold-italic {
-        font-family: "Philosopher", sans-serif;
-        font-weight: 700;
-        font-style: italic;
-        color: #3e3f3abf;
-    }
-
-    .good-rating {
-        background-color: #93c54b;
-        color: white;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    .okay-rating {
-        background-color: #ffc107;
-        color: white;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    .bad-rating {
-        background-color: #d9534f;
-        color: white;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    .book-rating {
-        display: inline-block;
-        padding: 5px;
-        border-radius: 5px;
-        font-weight: bold;
-    }
-
-    .rating-container {
-        display: inline-block;
-        padding: 5px;
-        border: 2px solid #ccc;
-        border-radius: 5px;
-    }
-
-    .comments-container {
-        background-color: rgba(255, 255, 255, 0.7);
-        border-radius: 10px;
-        padding: 20px;
-        /* max-width: 1000px; */
-    }
-
-    img {
-        max-height: 400px;
-    }
-
-    .totalPrice {
-        font-weight: bold;
-        color: crimson;
-        /* font-size: 20px; */
-    }
-
-    .rate {
-        float: left;
-        height: 46px;
-        padding: 0 10px;
-    }
-
-    .rate:not(:checked) > input {
-        position: absolute;
-        top: -9999px;
-    }
-
-    .rate:not(:checked) > label {
-        float: right;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-        cursor: pointer;
-        font-size: 30px;
-        color: #ccc;
-    }
-
-    .rate:not(:checked) > label:before {
-        content: '★ ';
-    }
-
-    .rate > input:checked ~ label {
-        color: #ffc700;
-    }
-
-    .rate:not(:checked) > label:hover,
-    .rate:not(:checked) > label:hover ~ label {
-        color: #deb217;
-    }
-
-    .rate > input:checked + label:hover,
-    .rate > input:checked + label:hover ~ label,
-    .rate > input:checked ~ label:hover,
-    .rate > input:checked ~ label:hover ~ label,
-    .rate > label:hover ~ input:checked ~ label {
-        color: #c59b08;
-    }
-
-</style>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/notify.min.js"></script>
 
 @section scripts {
     @if (TempData["ErrorMessage"] != null)
     {
-        <script>
+        @* <script>
             alert("@TempData["ErrorMessage"]");
+        </script> *@
+
+        <script>
+            $.notify("@TempData["ErrorMessage"]", { globalPosition: 'top center', className: 'alert' });
         </script>
+
     }
     @if (TempData["MissingRating"] != null)
     {
-        <script>
+       @*  <script>
             alert("@TempData["MissingRating"]");
+        </script> *@
+
+        <script>
+            $.notify("@TempData["MissingRating"]", { globalPosition: 'top center', className: 'alert' });
         </script>
     }
 }

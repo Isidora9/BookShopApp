@@ -4,6 +4,9 @@
     ViewData["Title"] = "Shopping Cart";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/notify.min.js"></script>
+
 <div class="p-5">
     <h4 class="philosopher-bold-italic">Shopping Cart</h4>
 
@@ -244,8 +247,13 @@
     </script>
     @if (TempData["ErrorMessage"] != null)
     {
-        <script>
+@*         <script>
             alert("@TempData["ErrorMessage"]");
+        </script> *@
+
+        <script>
+            $.notify("@TempData["ErrorMessage"]", { globalPosition: 'top center', className: 'alert alert-success' });
         </script>
+
     }
 }
