@@ -21,7 +21,7 @@ namespace BookShop.Controllers
             return View("Index");
         }
 
-        public IActionResult Privacy()
+        public IActionResult Contact()
         {
             return View();
         }

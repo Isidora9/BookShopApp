@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookShop.Data;
 using BookShop.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookShop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -128,6 +130,7 @@ namespace BookShop.Controllers
         }
 
         // GET: Comments/Delete/5
+        [AllowAnonymous]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,6 +151,7 @@ namespace BookShop.Controllers
         }
 
         // POST: Comments/Delete/5
+        [AllowAnonymous]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -159,6 +163,10 @@ namespace BookShop.Controllers
             }
 
             await _context.SaveChangesAsync();
+            if (User.IsInRole("User"))
+            {
+                return RedirectToAction("Index", "Shop");
+            }
             return RedirectToAction(nameof(Index));
         }
 

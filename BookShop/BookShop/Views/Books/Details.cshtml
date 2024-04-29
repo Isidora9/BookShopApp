@@ -164,21 +164,12 @@
 @section scripts {
     @if (TempData["ErrorMessage"] != null)
     {
-        @* <script>
-            alert("@TempData["ErrorMessage"]");
-        </script> *@
-
         <script>
             $.notify("@TempData["ErrorMessage"]", { globalPosition: 'top center', className: 'alert' });
         </script>
-
     }
     @if (TempData["MissingRating"] != null)
     {
-       @*  <script>
-            alert("@TempData["MissingRating"]");
-        </script> *@
-
         <script>
             $.notify("@TempData["MissingRating"]", { globalPosition: 'top center', className: 'alert' });
         </script>

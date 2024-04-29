@@ -12,28 +12,13 @@
 	<link href="~/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-
     <style>
-        body {
-            background-image: url('https://cdn.pixabay.com/photo/2016/03/27/19/32/book-1283865_1280.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
         }
-
-        .main-container {
-            background-color: rgba(255, 255, 255, 0.6);
-            margin: 20px;
-            padding: 30px;
-            border-radius: 10px;
-            width: 1500px;
-            
-        }
-        .container-a {
-            display: flex;
-            justify-content: center;
-        }
-
     </style>
     <header>
         <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
@@ -63,6 +48,9 @@
                                 <a class="nav-link" asp-area="" asp-controller="Books" asp-action="Index">Books</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

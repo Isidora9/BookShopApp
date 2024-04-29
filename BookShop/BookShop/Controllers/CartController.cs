@@ -137,7 +137,6 @@ namespace BookShop.Controllers
             var quantityDifference = quantity - oldQuantity;
             if (book.AvailableBookNum - quantityDifference >= 0)
             {
-                //book.AvailableBookNum -= quantity;
                 if (quantityDifference > 0)
                 {
                     book.AvailableBookNum -= quantityDifference;
@@ -147,7 +146,6 @@ namespace BookShop.Controllers
                     book.AvailableBookNum -= quantityDifference;
                 }
                 await _context.SaveChangesAsync();
-                //return Ok("Quantity updated successfully.");
                 return RedirectToAction("Index", "Cart");
             }
             else
@@ -184,8 +182,6 @@ namespace BookShop.Controllers
         {
             int disount = 0;
             var shippedOrders = _context.Orders
-                //.Include(o => o.OrderItems)
-                //.ThenInclude(o => o.Book)
                 .Where(o => o.UserId == user.Id && o.Shipped == true);
 
             if (shippedOrders != null)

@@ -1,0 +1,49 @@
+﻿.table-border {
+    border-color: darkgray !important;
+}
+
+.no-bottom {
+    border-bottom: none
+}
+
+.priceCalc {
+    text-align: right;
+}
+
+.totalPrice {
+    font-weight: bold;
+    color: crimson;
+    font-size: 20px;
+}
+
+.price {
+    font-weight: bold;
+    color: crimson !important;
+}
+
+table {
+    background-color: transparent !important;
+}
+
+thead, tbody, tfoot {
+    background-color: transparent !important;
+}
+
+td, th {
+    background-color: transparent !important;
+}
+
+.quantity {
+    width: 70px !important;
+}
+
+td {
+    vertical-align: middle !important;
+}
+
+.philosopher-bold-italic {
+    font-family: "Philosopher", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    color: #353535;
+}

@@ -18,5 +18,23 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-image: url('https://cdn.pixabay.com/photo/2016/03/27/19/32/book-1283865_1280.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.main-container {
+    background-color: rgba(255, 255, 255, 0.6);
+    margin: 20px;
+    padding: 30px;
+    border-radius: 10px;
+    width: 1500px;
+}
+
+.container-a {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
 }
