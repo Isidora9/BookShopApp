@@ -1,0 +1,178 @@
+﻿@using System.Security.Claims
+@model BookShop.Domain.Entities.Book
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link href="~/css/book/details.css" rel="stylesheet" />
+
+<div>
+    <h1 class="philosopher-bold-italic">@Html.DisplayFor(model => model.Title)</h1>
+    <hr />
+    <div class="row">
+        <div class="col-3 py-2">
+            <img src="@Html.DisplayFor(model => model.ImgUrl)" />
+        </div>
+        <div class="col-9">
+            <dl class="row mt-3">
+                <dt class="col-sm-2">
+                    Rating
+                </dt>
+                <dd class="col-sm-10">
+                    @if (ViewBag.BookRating == "empty")
+                    {
+                        <p>No reviews</p>
+                    }
+                    else
+                    {
+                        @if (Convert.ToDouble(@ViewBag.BookRating) >= 4)
+                        {
+                            <div class="book-rating good-rating px-2">
+                                @ViewBag.BookRating
+                            </div>
+                        }
+                        @if (Convert.ToDouble(@ViewBag.BookRating) < 4 && Convert.ToDouble(@ViewBag.BookRating) >= 2.5)
+                        {
+                            <div class="book-rating okay-rating px-2">
+                                @ViewBag.BookRating
+                            </div>
+                        }
+                        @if (Convert.ToDouble(@ViewBag.BookRating) < 2.5)
+                        {
+                            <div class="book-rating bad-rating px-2">
+                                @ViewBag.BookRating
+                            </div>
+                        }
+                    }
+
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Author)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Author)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Genre)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Genre)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+                <dd class="col-sm-10 totalPrice">
+                    @Html.DisplayFor(model => model.Price)
+                </dd>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.AvailableBookNum)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.AvailableBookNum)
+                    </dd>
+                }
+            </dl>
+
+        </div>
+    </div>
+</div>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.BookId" class="btn btn-primary mb-2">Edit</a>
+    </div>
+}
+<a asp-controller="Shop" asp-action="Index" class="btn btn-primary mt-5">Back to Shop</a>
+
+<h3 class="mt-5 mb-3 philosopher-bold-italic">Comments</h3>
+<div class="comments-container">
+    @if (Model.Comments != null)
+    {
+        @foreach (var item in Model.Comments)
+        {
+            <figure class="py-2">
+                <blockquote>
+                    <p class="mb-0">@item.Content</p>
+                    <div class="row justify-content-between">
+                        <div class="col-4">
+                            <div class="rating-container">
+                                <p class="mb-0">@item.Rating/5</p>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
+                            }
+                            @if (User.IsInRole("User") && item.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                            {
+                                <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
+                            }
+                        </div>
+                    </div>
+
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    @item.User.UserName, <cite title="Source Title">@item.CreatedAt</cite>
+                </figcaption>
+            </figure>
+            <hr></hr>
+        }
+    }
+
+    @if (User.IsInRole("User"))
+    {
+        <form class="my-5" asp-action="AddComment" method="post">
+
+            <div class="rate">
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="text">1 star</label>
+            </div>
+
+            <input type="hidden" name="bookId" value="@Model.BookId" />
+            <div class="mb-3 col-sm-6">
+                <textarea class="form-control" style="border-color: #808080;" id="comment" name="content" rows="4" placeholder="Enter your comment here..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Comment</button>
+        </form>
+    }
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/notify.min.js"></script>
+
+@section scripts {
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            $.notify("@TempData["ErrorMessage"]", { globalPosition: 'top center', className: 'alert' });
+        </script>
+    }
+    @if (TempData["MissingRating"] != null)
+    {
+        <script>
+            $.notify("@TempData["MissingRating"]", { globalPosition: 'top center', className: 'alert' });
+        </script>
+    }
+}
+

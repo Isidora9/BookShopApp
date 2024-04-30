@@ -1,0 +1,52 @@
+﻿
+.philosopher-bold-italic {
+    font-family: "Philosopher", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    color: #3e3f3abf;
+}
+
+.p1 {
+    text-indent: 4em;
+}
+
+p {
+    text-align: justify;
+}
+
+.links-container {
+    /*background-color: rgba(255, 255, 255, 0.6);*/
+    /*background-color: white;*/
+    border-radius: 10px;
+    max-width: 500px;
+    background: linear-gradient( to left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 10%, rgba(255, 255, 255, 1) 90%, rgba(255, 255, 255, 0) 100% );
+}
+
+.carousel {
+    max-height: 300px;
+    /*position: relative;*/
+}
+
+img {
+
+    max-width: 400px;
+    max-height: 250px;
+    object-fit: cover;
+}
+
+.carousel-control-next-icon, .carousel-control-prev-icon {
+/*    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    border: 2px solid white;
+*/    /*color: gray;*/
+}
+
+/*.carousel-control-prev {
+    position: absolute;
+    left: -95px;
+}
+
+.carousel-control-next {
+    position: absolute;
+    left: 1250px;
+}*/
