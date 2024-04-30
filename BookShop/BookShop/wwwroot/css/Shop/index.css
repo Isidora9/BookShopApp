@@ -47,33 +47,6 @@
     text-align: left;
 }
 
-/*.badge2 {
-    position: absolute;
-    top: -20px;
-    right: 40px;
-    background-color: #ffcc00;
-    color: #fff;
-    padding: 15px 25px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 20px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    clip-path: polygon(50% 0%, 90% 25%, 90% 75%, 50% 100%, 10% 75%, 10% 25%);
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.7);
-}
-
-.badge2:before {
-    content: "";
-    position: absolute;
-    bottom: -30px;
-    right: 25px;
-    width: 80px;
-    height: 40px;
-    background-color: #ffcc00;
-    border-radius: 15px;
-    clip-path: polygon(0% 50%, 35% 0%, 65% 0%, 100% 50%, 65% 100%, 35% 100%);
-}
-*/
 .pagination .page-item.active .page-link {
     z-index: 3;
     color: #fff;
@@ -85,10 +58,6 @@
     width: 70px;
 }
 
-/*.input-quantity {
-    input-quantity;
-}
-*/
 .filter-container {
     margin-right: 90px;
     padding: 10px;
