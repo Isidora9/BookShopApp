@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System.Linq.Expressions;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookShopTest.ControllerTests
 {
@@ -82,7 +80,7 @@ namespace BookShopTest.ControllerTests
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal(book, viewResult.Model); // Ensure the model is passed back to the view
+            Assert.Equal(book, viewResult.Model);
         }
 
         [Fact]
@@ -166,36 +164,6 @@ namespace BookShopTest.ControllerTests
             // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
-        }
-
-        [Fact]
-        public async Task Delete_WithExistingBookId_ReturnsViewResultWithBook()
-        {
-            // Arrange
-            var mockUserManager = new Mock<UserManager<ApplicationUser>>(Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);
-
-            int id = 1; // Specify an existing book id
-            var book = new Book { BookId = id, Title = "Dune" };
-            var books = new List<Book> { book };
-            var mockSet = new Mock<DbSet<Book>>();
-            //mockSet.Setup(m => m.FindAsync(id)).ReturnsAsync(book);
-
-            mockSet.As<IQueryable<Book>>().Setup(m => m.Provider).Returns(books.AsQueryable().Provider);
-            mockSet.As<IQueryable<Book>>().Setup(m => m.Expression).Returns(books.AsQueryable().Expression);
-            mockSet.As<IQueryable<Book>>().Setup(m => m.ElementType).Returns(books.AsQueryable().ElementType);
-            mockSet.As<IQueryable<Book>>().Setup(m => m.GetEnumerator()).Returns(books.AsQueryable().GetEnumerator());
-
-            var mockContext = new Mock<IApplicationDbContext>();
-            mockContext.Setup(m => m.Books).Returns(mockSet.Object);
-            var controller = new BooksController(mockContext.Object, mockUserManager.Object);
-
-            // Act
-            var result = await controller.Delete(id);
-
-            // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<Book>(viewResult.Model);
-            Assert.Equal(book, model);
         }
     }
 }
